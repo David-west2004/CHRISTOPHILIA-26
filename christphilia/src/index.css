@@ -1,0 +1,66 @@
+:root {
+  --obsidian: #09090b;
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.15);
+  --paper-border: rgba(212, 175, 55, 0.25);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--obsidian);
+  color: #f4f4f5;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+.font-cinzel {
+  font-family: 'Times New Roman', Times, serif;
+  letter-spacing: 0.18em;
+}
+
+.editorial-card {
+  background: #111114;
+  border: 1px solid var(--paper-border);
+  position: relative;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.95);
+}
+
+.editorial-card::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.12);
+  pointer-events: none;
+}
+
+.bg-vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gold-divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 1.5rem auto;
+}
+
+/* Responsive typography & letter-spacing for the title */
+.responsive-title {
+  font-size: clamp(1.4rem, 5vw, 2.25rem);
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 576px) {
+  .responsive-title {
+    letter-spacing: 0.16em;
+  }
+}
