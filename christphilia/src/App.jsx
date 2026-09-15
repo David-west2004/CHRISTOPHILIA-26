@@ -3,9 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 
 export default function App() {
-  const [stage, setStage] = useState(0); // 0: Invitation Gate, 1: RSVP Prompt, 2: Ticket
+  // 0: Gate, 1: RSVP Prompt, 2: Verification Pending, 3: Ticket Pass
+  const [stage, setStage] = useState(0);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [dodgeCount, setDodgeCount] = useState(0);
+
+  const LUMA_URL = "https://luma.com/2ugi4qzs";
 
   const dodgeAlerts = [
     "B. Am not coming",
@@ -17,7 +20,6 @@ export default function App() {
   ];
 
   const handleDodge = () => {
-    // Generate erratic jump vectors with boundary limits
     const angle = Math.random() * 2 * Math.PI;
     const distance = Math.floor(Math.random() * 150) + 120;
     setNoPos({
@@ -28,14 +30,30 @@ export default function App() {
   };
 
   const handleYes = () => {
-    // Elegant monochrome and gold celebratory burst
+    // Elegant celebration burst
     confetti({
       particleCount: 90,
       spread: 70,
       origin: { y: 0.65 },
       colors: ["#d4af37", "#ffffff", "#854d0e"]
     });
+
+    // Open Luma registration in a new tab
+    window.open(LUMA_URL, "_blank", "noopener,noreferrer");
+
+    // Advance to the registration completion check
     setStage(2);
+  };
+
+  const handleConfirmedRegistration = () => {
+    // Second burst on final ticket reveal
+    confetti({
+      particleCount: 120,
+      spread: 100,
+      origin: { y: 0.5 },
+      colors: ["#d4af37", "#ffffff", "#854d0e"]
+    });
+    setStage(3);
   };
 
   return (
@@ -58,7 +76,7 @@ export default function App() {
               <img
                 src="/christophilia.jpeg"
                 alt="Christophilia '26"
-                className="rounded-circle border border-warning shadow-sm"
+                className="rounded-circle border border-warning shadow-sm mb-4"
                 style={{
                   width: "90px",
                   height: "90px",
@@ -95,7 +113,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* STAGE 1: THE DECISION SCREEN */}
+          {/* STAGE 1: THE EVASIVE DECISION SCREEN */}
           {stage === 1 && (
             <motion.div
               key="stage-1"
@@ -119,7 +137,6 @@ export default function App() {
                 Select your status below to register your attendance.
               </p>
 
-              {/* ACTION AREA */}
               <div className="position-relative d-flex flex-wrap align-items-center justify-content-center gap-3 py-2" style={{ minHeight: "140px" }}>
 
                 {/* OPTION A: STABLE YES BUTTON */}
@@ -168,10 +185,68 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* STAGE 2: PASS CONFIRMATION */}
+          {/* STAGE 2: STEP COMPLETION / VERIFICATION GATE */}
           {stage === 2 && (
             <motion.div
               key="stage-2"
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="editorial-card p-4 p-md-5 text-center"
+            >
+              <div className="text-warning mb-3">
+                <i className="bi bi-box-arrow-up-right fs-1" />
+              </div>
+
+              <span className="text-uppercase text-secondary small fw-semibold" style={{ letterSpacing: "0.2em" }}>
+                Final Step
+              </span>
+
+              <h2 className="font-cinzel text-white fs-3 fw-bold mt-2 mb-0">
+                Complete Your Registration
+              </h2>
+
+              <div className="gold-divider" />
+
+              <p className="text-secondary small line-height-lg mb-4">
+                We opened the official registration page in a new tab. Once you have submitted your details on Luma, confirm below to reveal your pass.
+              </p>
+
+              <div className="d-flex flex-column gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleConfirmedRegistration}
+                  className="btn btn-warning rounded-0 py-3 fw-bold text-dark text-uppercase shadow-sm"
+                  style={{
+                    letterSpacing: "0.1em",
+                    fontSize: "0.85rem",
+                    backgroundColor: "var(--gold)",
+                    borderColor: "var(--gold)"
+                  }}
+                >
+                  <i className="bi bi-check-circle-fill me-2" />
+                  I Have Completed Registration
+                </motion.button>
+
+                <a
+                  href={LUMA_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-secondary small text-decoration-none"
+                  style={{ opacity: 0.75, fontSize: "0.78rem" }}
+                >
+                  Tab didn&apos;t open? <span className="text-warning text-decoration-underline">Click here to register on Luma</span>
+                </a>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STAGE 3: SEAT ALLOCATED CONFIRMATION PASS */}
+          {stage === 3 && (
+            <motion.div
+              key="stage-3"
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
